@@ -151,7 +151,7 @@ export const returnWhatIPassIn = <T extends string>(genericString: T): T => gene
 
 //////////////////////////////////////////
 
-  const returnBothOfWhatIPassIn = (a: string, b: number) => {
+  const returnBothOfWhatIPassIn = <A,B>(a: A, b: B) => {
   return {
     a,
     b,
@@ -183,7 +183,7 @@ const array = [
   },
 ];
 
-const obj2 = array.reduce((accum, item) => {
+const obj2 = array.reduce((accum : {name:string}, item : {name:string}) => {
   accum[item.name] = item;
   return accum;
 }, {});
