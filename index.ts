@@ -34,23 +34,27 @@ move(
 
 
 type Shape = {
-    kind: string; // it will be circle or square
+    kind: "circle" | "square"; // it will be circle or square
     radius?: number; // only with circle
     sideLength?: number; // only with square
 };
 
-function calculateArea(shape: Shape) {
-    if(shape.kind === "circle") {
-        return Math.PI * (shape.radius??0) * (shape.radius??0)
-    } else {
-        return (shape.sideLength??0) * (shape.sideLength??0)
+function calculateArea(shape: Shape) : number{
+    if(shape.kind === 'circle'){
+      if(shape.radius === undefined){
+        throw new Error('Enter The Radius Please!!');
+      }
+      return Math.PI * shape.radius * shape.radius;
     }
+    if(shape.sideLength === undefined ){
+      throw new Error('Enter The SideLength!!')
+    }
+    return shape.sideLength * shape.sideLength
 }
 
 const square = calculateArea({
     kind: 'square',
     sideLength: 5
-    
 });
 
 
@@ -62,8 +66,9 @@ const square = calculateArea({
 type User = {
     id: string;
 };
-
-type ApiResposne = [boolean, User[] | string];
+type TrueAndUser = [true , User[]]
+type FalseAndString = [false , string]
+type ApiResposne = TrueAndUser | FalseAndString
 
 async function fetchData(): Promise<ApiResposne> {
     try {
@@ -74,9 +79,7 @@ async function fetchData(): Promise<ApiResposne> {
                 "an error occurred"
             ]
         }
-
-        const data = await response.json();
-
+        const data = await response.json() as User[];
         return [true, data]
     } catch(error) {
         return [false, "An errro occurred"]
@@ -101,7 +104,7 @@ async function exampleFunc() {
 
 
 interface IProduct {
-    id: number;
+    id?: number;
     name: string;
     price: number;
     description: string
@@ -113,14 +116,12 @@ const updateProduct = (id: number, productInfo: IProduct) => {
 
 // make this function accept any of IProduct interface except the id
 updateProduct(1, {
-    id: 2,
     name: 'newProduct',
     price: 10,
     description: 'newProductDescripton',
 });
 
 updateProduct(1, {
-    id:3,
     name: 'sceondProduct',
     price: 5,
     description: 'secondProductDescription'
